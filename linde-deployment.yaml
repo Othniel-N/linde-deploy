@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linde-app
+  namespace: linde
+  labels:
+    app: linde
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linde
+  template:
+    metadata:
+      labels:
+        app: linde
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - name: linde
+          image: difinative/linde:v7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+            - containerPort: 3001
+          envFrom:
+            - configMapRef:
+                name: linde-config
+          volumeMounts:
+            - name: sqlite-data
+              mountPath: /app/prisma
+            - name: uploads-data
+              mountPath: /app/public/uploads
+            - name: public-data
+              mountPath: /app/public
+          securityContext:
+            runAsUser: 10001
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: sqlite-data
+          persistentVolumeClaim:
+            claimName: sqlite-pvc
+        - name: uploads-data
+          persistentVolumeClaim:
+            claimName: uploads-pvc
+        - name: public-data
+          persistentVolumeClaim:
+            claimName: public-pvc

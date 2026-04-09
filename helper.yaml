@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-helper
+  namespace: linde
+spec:
+  containers:
+  - name: helper
+    image: alpine:3.18
+    command: ["sleep", "3600"]
+    volumeMounts:
+      - name: public-data
+        mountPath: /app/public
+      - name: sqlite-data
+        mountPath: /app/prisma
+  volumes:
+    - name: public-data
+      persistentVolumeClaim:
+        claimName: public-pvc
+    - name: sqlite-data
+      persistentVolumeClaim:
+        claimName: sqlite-pvc
