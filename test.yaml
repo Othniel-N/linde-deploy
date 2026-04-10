@@ -18,3 +18,10 @@ spec:
 
 kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
 kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/operator.yaml
+
+helm repo add external-secrets https://charts.external-secrets.io
+helm repo update
+
+helm install external-secrets external-secrets/external-secrets \
+  -n external-secrets \
+  --create-namespace
