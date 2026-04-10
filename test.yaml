@@ -16,23 +16,6 @@ spec:
       property: password
 
 
-kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/crds/bundle.yaml
-kubectl apply -f https://raw.githubusercontent.com/external-secrets/external-secrets/main/deploy/operator.yaml
-
-helm repo add external-secrets https://charts.external-secrets.io
-helm repo update
-
-helm install external-secrets external-secrets/external-secrets \
-  -n external-secrets \
-  --create-namespace
-
-
-  helm repo add aws-secrets-manager https://aws.github.io/secrets-store-csi-driver-provider-aws
-helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver
-helm install aws-provider aws-secrets-manager/secrets-store-csi-driver-provider-aws
-
-
-kubectl run aws-debug \
-  --rm -it \
-  --image=amazon/aws-cli \
-  -- bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+./aws/install
