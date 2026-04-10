@@ -25,3 +25,9 @@ helm repo update
 helm install external-secrets external-secrets/external-secrets \
   -n external-secrets \
   --create-namespace
+
+
+kubectl run aws-debug \
+  --rm -it \
+  --image=amazon/aws-cli \
+  -- bash
