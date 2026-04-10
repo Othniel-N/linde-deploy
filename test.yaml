@@ -27,6 +27,11 @@ helm install external-secrets external-secrets/external-secrets \
   --create-namespace
 
 
+  helm repo add aws-secrets-manager https://aws.github.io/secrets-store-csi-driver-provider-aws
+helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver
+helm install aws-provider aws-secrets-manager/secrets-store-csi-driver-provider-aws
+
+
 kubectl run aws-debug \
   --rm -it \
   --image=amazon/aws-cli \
