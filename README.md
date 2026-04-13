@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: titan-backend
+  name: tanishq-fe-test-deployment
   namespace: tanishq
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: titan-backend
+      app: tanishq-fe-test
   template:
     metadata:
       labels:
-        app: titan-backend
+        app: tanishq-fe-test
     spec:
       containers:
-      - image: difinative/tanishq-be:latest
+        image: difinative/tanishq-fe:latest
         imagePullPolicy: Always
-        name: tanishq-test-container
+        name: tanishq-fe-test-container
         ports:
-        - containerPort: 8000
+        - containerPort: 80
           protocol: TCP
         envFrom:
           - configMapRef:
