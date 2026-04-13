@@ -1,29 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: tanishq-fe-test-deployment
-  namespace: tanishq
+  name: titan-uploader-pvc
+  namespace: titan
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: tanishq-fe-test
-  template:
-    metadata:
-      labels:
-        app: tanishq-fe-test
-    spec:
-      containers:
-        image: difinative/tanishq-fe:latest
-        imagePullPolicy: Always
-        name: tanishq-fe-test-container
-        ports:
-        - containerPort: 80
-          protocol: TCP
-        envFrom:
-          - configMapRef:
-              name: titan-configmap
-          - secretRef:
-              name: rds-secret
-          - secretRef:
-              name: titan-secrets
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
