@@ -1,3 +1,11 @@
+apiVersion: v1
+data:
+  API_URL: http://tanishq-test-service.tanishq/api/upload-to-archive
+kind: ConfigMap
+metadata:
+  name: titan-uploader-config
+  namespace: titan
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
