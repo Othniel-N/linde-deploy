@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SECRET_ID="arn:aws:secretsmanager:ap-south-1:358456789401:secret:rds!db-b0fiierb419-3485f699-19bF"
+SECRET_ID="arn:aws:secrebF"
 NAMESPACE="titan"
 SECRET_NAME="rds-secret"
 
