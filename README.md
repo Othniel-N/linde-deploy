@@ -1,11 +1,1 @@
-apiVersion: v1
-data:
-  GEMINI_API_KEY: AIzaSyB6916wAQO_4f6ipCkNwwdP9Qt6RvcZ
-  JWT_SECRET_KEY: Y2EyNDg3NTg3Mzc0MzNhZTE2MmU3Zjk0MWRiNjkwNjM0ZTI2NzkxMjllNGNlM2FhMmIwYWNlMDNiNDU1YWNjNQ==
-  VITE_AZURE_CLIENT_ID: N2U1YThmZTctY2Y2YS00OTAzLWI1MWEtNTQzMmM3N2VmZGNm
-  VITE_AZURE_TENANT_ID: ZjJhOWE5MDMtOWUwNi00Yzk2LWI4YTAtMjRhZDg4MDFkMjZk
-kind: Secret
-metadata:
-  name: titan-secrets
-  namespace: titan
-type: Opaque
+
