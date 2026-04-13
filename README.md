@@ -1,23 +1,15 @@
-#!/bin/bash
-
-SECRET_ID="arn:aws:secrebF"
-NAMESPACE="titan"
-SECRET_NAME="rds-secret"
-
-echo "Fetching secret from AWS..."
-
-SECRET=$(aws secretsmanager get-secret-value \
-  --secret-id $SECRET_ID \
-  --query SecretString \
-  --output text)
-
-PASSWORD=$(echo $SECRET | jq -r '.password')
-
-echo "Updating Kubernetes secret..."
-
-kubectl create secret generic $SECRET_NAME \
-  --from-literal=DB_PASSWORD="$PASSWORD" \
-  -n $NAMESPACE \
-  --dry-run=client -o yaml | kubectl apply -f -
-
-echo "Done!"
+apiVersion: v1
+data:
+  ACCESS_TOKEN_EXPIRE_MINUTES: "1440"
+  DB_HOST: 
+  DB_NAME: 
+  DB_PORT: "5432"
+  DB_USER: 
+  JWT_ALGORITHM: HS256
+  VITE_API_BASE_URL: 
+  VITE_AZURE_REDIRECT_URI:
+  VITE_UPLOADER_URL: 
+kind: ConfigMap
+metadata:
+  name: tanishq-configmap
+  namespace: titan
