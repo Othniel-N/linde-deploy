@@ -1,45 +1,23 @@
-apiVersion: secrets-store.csi.x-k8s.io/v1
-kind: SecretProviderClass
-metadata:
-  name: rds-secret
-  namespace: titan
-spec:
-  provider: aws
-  parameters:
-    objects: |
-      - objectName: ""
-        objectType: "secretsmanager"
-        jmesPath:
-          - path: "password"
-            objectAlias: "password"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/main/deploy/csidriver.yaml
+#!/bin/bash
 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/main/deploy/rbac-secretproviderclass.yaml
+SECRET_ID="arn:aws:secretsmanager:ap-south-1:358456789401:secret:rds!db-b0fiierb419-3485f699-19bF"
+NAMESPACE="titan"
+SECRET_NAME="rds-secret"
 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/main/deploy/secrets-store-csi-driver.yaml
+echo "Fetching secret from AWS..."
 
- kubectl apply -f https://github.com/kubernetes-sigs/secrets-store-csi-driver/releases/latest/download/secrets-store.csi.x-k8s.io_secretproviderclasses.yaml
- kubectl apply -f https://github.com/kubernetes-sigs/secrets-store-csi-driver/releases/latest/download/secrets-store-csi-driver.yaml
+SECRET=$(aws secretsmanager get-secret-value \
+  --secret-id $SECRET_ID \
+  --query SecretString \
+  --output text)
 
+PASSWORD=$(echo $SECRET | jq -r '.password')
 
-apiVersion: v1
-kind: Pod
-metadata:
-  name: secret-test
-  namespace: titan
-spec:
-  containers:
-    - name: test
-      image: busybox
-      command: ["sh", "-c", "sleep 3600"]
-      volumeMounts:
-        - name: secrets-store
-          mountPath: "/mnt/secrets"
-          readOnly: true
+echo "Updating Kubernetes secret..."
 
-  volumes:
-    - name: secrets-store
-      csi:
-        driver: secrets-store.csi.k8s.io
-        volumeAttributes:
-          secretProviderClass: "rds-secret"
+kubectl create secret generic $SECRET_NAME \
+  --from-literal=DB_PASSWORD="$PASSWORD" \
+  -n $NAMESPACE \
+  --dry-run=client -o yaml | kubectl apply -f -
+
+echo "Done!"
