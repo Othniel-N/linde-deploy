@@ -19,3 +19,26 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/secrets-store
 
  kubectl apply -f https://github.com/kubernetes-sigs/secrets-store-csi-driver/releases/latest/download/secrets-store.csi.x-k8s.io_secretproviderclasses.yaml
  kubectl apply -f https://github.com/kubernetes-sigs/secrets-store-csi-driver/releases/latest/download/secrets-store-csi-driver.yaml
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secret-test
+  namespace: titan
+spec:
+  containers:
+    - name: test
+      image: busybox
+      command: ["sh", "-c", "sleep 3600"]
+      volumeMounts:
+        - name: secrets-store
+          mountPath: "/mnt/secrets"
+          readOnly: true
+
+  volumes:
+    - name: secrets-store
+      csi:
+        driver: secrets-store.csi.k8s.io
+        volumeAttributes:
+          secretProviderClass: "rds-secret"
