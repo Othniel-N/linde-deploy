@@ -1,22 +1,14 @@
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
+apiVersion: secrets-store.csi.x-k8s.io/v1
+kind: SecretProviderClass
 metadata:
-  name: test-secret
+  name: rds-secret
+  namespace: titan
 spec:
-  refreshInterval: 1m
-  secretStoreRef:
-    name: aws-secret-store
-    kind: SecretStore
-  target:
-    name: test-secret
-  data:
-  - secretKey: password
-    remoteRef:
-      key: 
-      property: password
-
-
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/main/deploy/rbac-secretproviderclass.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/main/deploy/secrets-store-csi-driver.yaml
-
-kubectl apply -f https://raw.githubusercontent.com/aws/secrets-store-csi-driver-provider-aws/main/deployment/aws-provider-installer.yaml
+  provider: aws
+  parameters:
+    objects: |
+      - objectName: ""
+        objectType: "secretsmanager"
+        jmesPath:
+          - path: "password"
+            objectAlias: "password"
