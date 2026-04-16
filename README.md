@@ -12,7 +12,6 @@ kind: ConfigMap
 metadata:
   name: titan-frontend-env-config
   namespace: titan
-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
 
 
 
