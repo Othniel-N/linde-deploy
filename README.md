@@ -1,47 +1,28 @@
 apiVersion: v1
-kind: Service
+data:
+  env-config.js: |
+    window._env_ = {
+      VITE_API_BASE_URL: "https://tanishq.test.squirrelvision.ai",
+      VITE_UPLOADER_URL: "https://titan-uploader.test.squirrelvision.ai",
+      VITE_AZURE_CLIENT_ID: "your-client-id",
+      VITE_AZURE_TENANT_ID: "your-tenant-id",
+      VITE_AZURE_REDIRECT_URI: "https://tanishq-fe.test.squirrelvision.ai/auth"
+    };
+kind: ConfigMap
 metadata:
-  name: titan-backend-service
+  name: titan-frontend-env-config
   namespace: titan
-spec:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 8000
-  selector:
-    app: titan-backend
-  type: ClusterIP
 
 
 
-piVersion: v1
-kind: Service
-metadata:
-  name: titan-frontend
-  namespace: titan
-spec:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 80
-  selector:
-    app: titan-frontend
-  type: ClusterIP
 
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: titan-frontend-env-config
+        name: env-config-volume
 
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: titan-uploader
-  namespace: titan
-spec:
-  ports:
-  - name: http
-    port: 80
-    protocol: TCP
-    targetPort: 5000
-  selector:
-    app: titan-uploader
-  type: ClusterIP
-
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/env-config.js
+          name: env-config-volume
+          subPath: env-config.js
