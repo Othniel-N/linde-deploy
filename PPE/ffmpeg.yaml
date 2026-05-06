@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ffmpeg-shell
+spec:
+  restartPolicy: Never
+  containers:
+  - name: ffmpeg
+    image: jrottenberg/ffmpeg:6.1-alpine
+    command: ["sleep", "3600"]
