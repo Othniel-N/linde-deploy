@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ppe-pvc-seeder
+  namespace: dev-devnath
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: Never
+      initContainers:
+        # Optional: wipe PVC before seeding so stale files don't linger
+        - name: cleanup
+          image: alpine:3.19
+          command: [sh, -c, "rm -rf /data/* && echo 'PVC cleared'"]
+          volumeMounts:
+            - name: ppe-storage
+              mountPath: /data
+
+      containers:
+        - name: seeder
+          image: difinative/linde-data:v3   # ← your data image
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -c
+            - |
+              echo "Seeding PVC from image..."
+              cp -av /ppe-data/. /data/
+              echo "✅ Seeding complete"
+              ls -lh /data/
+          volumeMounts:
+            - name: ppe-storage
+              mountPath: /data
+
+      volumes:
+        - name: ppe-storage
+          persistentVolumeClaim:
+            claimName: linde-ppe-pvc
