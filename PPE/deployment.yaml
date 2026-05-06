@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linde-ppe
+  namespace: dev-devnath
+  labels:
+    app: linde-ppe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linde-ppe
+  template:
+    metadata:
+      labels:
+        app: linde-ppe
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      runtimeClassName: nvidia
+      containers:
+        - name: linde-ppe
+          image: difinative/linde-deepstream:v1
+          env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "all"
+            - name: TZ
+              value: "Asia/Kolkata"
+          resources:
+            limits:
+              nvidia.com/gpu: "1"
+            requests:
+              nvidia.com/gpu: "1"
+          ports:
+            - containerPort: 8555
+            - containerPort: 8556
+            - containerPort: 8557
+            - containerPort: 8558
+            - containerPort: 3001
+          volumeMounts:
+            - name: ppe-storage
+              mountPath: /root/LINDE
+      volumes:
+        - name: ppe-storage
+          persistentVolumeClaim:
+            claimName: linde-ppe-pvc
+      restartPolicy: Always
