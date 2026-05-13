@@ -14,7 +14,7 @@ while ($true) {
     try {
         Write-Host "Launching tunnel: localhost:$LocalPort -> $RemoteNodeIP:$RemotePort"
 
-        # Start SSH tunnel
+        # Start tunnel
         $proc = Start-Process -FilePath "ssh" -ArgumentList @(
             "-N",
             "-L", "$LocalPort`:$RemoteNodeIP`:$RemotePort",
