@@ -41,8 +41,8 @@ def log(message, level="INFO"):
 # ============= CONFIG =============
 MUXER_OUTPUT_WIDTH = 1280
 MUXER_OUTPUT_HEIGHT = 720
-RELAY_URL = "http://192.168.0.35:31425"
-WS_URL = "ws://192.168.0.35:31425/edge"
+RELAY_URL = "http://10.151.136.6"
+WS_URL = "ws://10.151.136.6/edge"
 SOURCE_CONNECTION_TIMEOUT = 5
 SNAPSHOT_WORKERS = 3
 
