@@ -19,7 +19,7 @@ spec:
         fsGroup: 10001
       containers:
         - name: linde
-          image: difinative/linde:v7
+          image: difinative/linde:v11
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
